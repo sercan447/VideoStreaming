@@ -3,6 +3,7 @@ package com.example.spad.services.videostreaming.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.spad.services.videostreaming.DetailActivity;
 import com.example.spad.services.videostreaming.Model.Data;
+import com.example.spad.services.videostreaming.Model.Item;
 import com.example.spad.services.videostreaming.R;
 
 import java.text.Normalizer;
@@ -55,21 +57,25 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
         Locale trlocale= new Locale("tr");
 
-        String val = this.movieList.get(0).getItemList().get(position).getTitle().toLowerCase(trlocale);
+       Item item = this.movieList.get(0).getItemList().get(position);
+
+        String val = item.getTitle().toLowerCase(trlocale);
         String a = Normalizer.normalize(val, Normalizer.Form.NFD).replaceAll("\\p{Mn}", "");
 
        // holder.tvTitle.setText(a);
 
-
         Glide.with(context)
-                .load(this.movieList.get(0).getItemList().get(position).getImageUrl())
+                .load(item.getImageUrl())
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.imageView);
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, DetailActivity.class));
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("itemNews",item);
+
+                context.startActivity(intent);
             }
         });
 

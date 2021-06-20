@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.spad.services.videostreaming.Model.DataDetail;
+import com.example.spad.services.videostreaming.Model.Item;
 import com.example.spad.services.videostreaming.Model.Model;
 import com.example.spad.services.videostreaming.Model.ModelDetail;
 import com.example.spad.services.videostreaming.viewmodel.NewsListViewModel;
@@ -26,18 +27,35 @@ public class DetailActivity extends AppCompatActivity {
     ImageView imageView;
 
     private NewsListViewModel viewModel;
-
+    private Item item=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         tvTitle = findViewById(R.id.titleView);
-        imageView = findViewById(R.id.imageView);
+        imageView = findViewById(R.id.imageView1);
 
+
+
+        if(getIntent() != null){
+             item =  (Item) getIntent().getExtras().get("itemNews");
+
+             if(item != null) {
+                 Glide.with(getApplicationContext())
+                         .load(item.getImageUrl())
+                         .placeholder(R.drawable.placeholder)
+                         .apply(RequestOptions.centerCropTransform())
+                         .into(imageView);
+
+                 tvTitle.setText(Html.fromHtml(item.getShortText(), Html.FROM_HTML_MODE_COMPACT));
+             }
+        }
+
+
+
+        /*
         viewModel = ViewModelProviders.of(this).get(NewsListViewModel.class);
-
-
         viewModel.getNewsDetailObServer().observe(this, new Observer<ModelDetail>() {
 
             @Override
@@ -59,8 +77,8 @@ public class DetailActivity extends AppCompatActivity {
             }
 
         });
-
         viewModel.makeNewsDetaill();
+        */
 
     }
 
